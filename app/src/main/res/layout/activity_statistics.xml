@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StatisticsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/recordLastMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="0"
+            android:text="@string/recordMin" />
+        <TextView
+            android:id="@+id/allTimeRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_marginLeft="50dp"
+            android:text="@string/allTimeRecord" />
+        <TextView
+            android:id="@+id/resetStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="0"
+            android:text="@string/resetStats" />
+
+
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/recordStats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="195dp"
+        android:text="@string/recordStats" />
+
+    <TextView
+        android:id="@+id/allTimeStats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="220dp"
+        android:layout_weight="0"
+        android:text="@string/allTimeStats" />
+
+    <Button
+        android:id="@+id/resetStatsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="250dp"
+        android:backgroundTint="#99ccff"
+        android:text="@string/resetBtn" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

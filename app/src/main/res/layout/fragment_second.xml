@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SecondFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="350dp">
+
+        <Button
+            android:id="@+id/rockBtn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#DA7373"
+            android:text="@string/rockBtn" />
+
+        <Button
+            android:id="@+id/paperBtn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#D6CD7E"
+            android:text="@string/paperBtn" />
+
+        <Button
+            android:id="@+id/scissorsBtn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#4CAF50"
+            android:text="@string/scissorsBtn" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/computerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="166dp"
+        android:layout_marginBottom="141dp"
+        android:text="@string/computerLabel" />
+
+    <TextView
+        android:id="@+id/youTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="270dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginBottom="141dp"
+        android:text="@string/youLabel" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/computerImageView"
+            android:layout_width="124dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="60dp"
+            android:contentDescription="@string/compImage"
+            android:src="@drawable/ic_rock" />
+
+        <ImageView
+            android:id="@+id/youImageView"
+            android:layout_width="124dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="150dp"
+            android:contentDescription="@string/youImage"
+            android:src="@drawable/ic_paper" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/gameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="400dp"
+            android:gravity="center"
+            android:text="@string/gameLabel"
+            android:textSize="26sp" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

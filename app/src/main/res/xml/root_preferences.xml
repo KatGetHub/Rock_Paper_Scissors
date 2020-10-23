@@ -1,0 +1,36 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <PreferenceCategory
+        android:background="#B6AFAF"
+        android:text="Game Play"
+        android:visibility="visible"
+        app:title="@string/game_play"
+        tools:text="Game Play">
+
+        <SwitchPreferenceCompat
+            android:id="@+id/saveGame"
+            android:visibility="visible"
+            app:key="saveOnClose"
+            app:title="@string/optSaveGame" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:background="#B6AFAF"
+        android:checked="false"
+        android:text="Game Play"
+        android:visibility="visible"
+        app:title="@string/appearance"
+        tools:text="appearance">
+
+        <SwitchPreferenceCompat
+            android:id="@+id/darkTheme"
+            android:checked="false"
+            android:visibility="visible"
+            app:key="darkTheme"
+            app:title="@string/optDarkTheme" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
