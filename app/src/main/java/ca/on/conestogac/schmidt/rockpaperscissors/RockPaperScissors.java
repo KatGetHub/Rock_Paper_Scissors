@@ -5,12 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseManipulation extends Application {
+public class RockPaperScissors extends Application {
+
     private static final String DB_NAME = "db_tax_stats";
     private static final int DB_VERSION = 1;
 
     private SQLiteOpenHelper helper;
-
 
     @Override
     public void onCreate() {

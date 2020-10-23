@@ -278,17 +278,13 @@ public class SecondFragment extends Fragment {
     }
 
     public void SendGameStats(int win, int loss, int tie){
-        StatisticsActivity statisticsActivity  = new StatisticsActivity();
-       // final DatabaseActivity application;
-        //application.GetTotalGameScore();
-       /* try {
-            ((DatabaseActivity) getActivity().getApplication()).StoreGamePlays(win, loss, tie);
+        try {
+            ((RockPaperScissors) getActivity().getApplication()).StoreGamePlays(win, loss, tie);
         }catch (NullPointerException ex){
-            System.out.println("LOOK HERE: " + ex);
+            System.out.println("LOOK HERE NULL : " + ex);
         }
-        // statisticsActivity.CreateDatabase();
-        //statisticsActivity.StoreGamePlays(win,loss,tie);
-*/
+
+
     }
     public void CheckWinner(String userHand) {
 

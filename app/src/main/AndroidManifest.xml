@@ -3,6 +3,7 @@
     package="ca.on.conestogac.schmidt.rockpaperscissors">
 
     <application
+        android:name=".RockPaperScissors"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
