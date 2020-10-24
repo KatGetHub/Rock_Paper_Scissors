@@ -20,12 +20,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-
-        darkMode = getIntent().getStringExtra("DARK_MODE");
-
-        if(darkMode == null){
+       // darkMode = getIntent().getStringExtra("DARK_MODE");
+        //SettingsActivity settingsActivity = new SettingsActivity();
+        //darkMode = String.valueOf(settingsActivity.darkMode);
+       if(darkMode == null){
             darkMode = "";
         }
+
+
         if(darkMode.equals("true")){
             setTheme(R.style.DarkTheme);
         }else{

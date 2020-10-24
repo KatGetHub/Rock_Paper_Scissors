@@ -38,6 +38,11 @@ public class StatisticsActivity extends AppCompatActivity {
 
         TextView allTimeRecord = (TextView)findViewById(R.id.allTimeStats);
         //allTimeRecord.setText(GetTotalGameScore());
+        try {
+            allTimeRecord.setText(((RockPaperScissors) getApplication()).GetTotalGameScore());
+        }catch (NullPointerException ex){
+            System.out.println("LOOK HERE NULL : " + ex);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

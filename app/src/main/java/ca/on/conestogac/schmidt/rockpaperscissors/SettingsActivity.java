@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -108,16 +109,38 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        int id = item.getItemId();
+
+        if (item.getItemId() == android.R.id.home) {
+                String darkString = Boolean.toString(darkMode);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("DARK_MODE", darkString);
+
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    /*
     public boolean onOptionsItemSelected(MenuItem item){
+        //onbackpressed();
+        SecondFragment secondFragment = new SecondFragment();
+        if(secondFragment.firstPlay == null){
+            String darkString = Boolean.toString(darkMode);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("DARK_MODE", darkString);
+            startActivity(intent);
+        }else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.settings,secondFragment).commit();
 
-        String darkString = Boolean.toString(darkMode);
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra("DARK_MODE", darkString);
-        startActivity(intent);
+        }
+
         return true;
     }
-
+*/
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("rememberDarkTheme", darkMode);

@@ -122,15 +122,17 @@ public class SecondFragment extends Fragment {
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        compImageView.setVisibility(View.VISIBLE);
-                                        compImageView.setImageResource(R.drawable.ic_rock);
-                                        compImageView.setAlpha(0f);
-                                        compImageView.animate().alpha(1f).setDuration(1000);
-                                    }
-                                });
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            compImageView.setVisibility(View.VISIBLE);
+                                            compImageView.setImageResource(R.drawable.ic_rock);
+                                            compImageView.setAlpha(0f);
+                                            compImageView.animate().alpha(1f).setDuration(1000);
+                                        }
+                                    });
+                                }
                             }
                         }, 1000);
 
@@ -141,15 +143,17 @@ public class SecondFragment extends Fragment {
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        compImageView.setVisibility(View.VISIBLE);
-                                        compImageView.setImageResource(R.drawable.ic_paper);
-                                        compImageView.setAlpha(0f);
-                                        compImageView.animate().alpha(1f).setDuration(1000);
-                                    }
-                                });
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            compImageView.setVisibility(View.VISIBLE);
+                                            compImageView.setImageResource(R.drawable.ic_paper);
+                                            compImageView.setAlpha(0f);
+                                            compImageView.animate().alpha(1f).setDuration(1000);
+                                        }
+                                    });
+                                }
                             }
                         }, 1000);
 
@@ -160,15 +164,17 @@ public class SecondFragment extends Fragment {
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        compImageView.setVisibility(View.VISIBLE);
-                                        compImageView.setImageResource(R.drawable.ic_scissors);
-                                        compImageView.setAlpha(0f);
-                                        compImageView.animate().alpha(1f).setDuration(1000);
-                                    }
-                                });
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            compImageView.setVisibility(View.VISIBLE);
+                                            compImageView.setImageResource(R.drawable.ic_scissors);
+                                            compImageView.setAlpha(0f);
+                                            compImageView.animate().alpha(1f).setDuration(1000);
+                                        }
+                                    });
+                                }
                             }
                         }, 1000);
 
@@ -279,7 +285,9 @@ public class SecondFragment extends Fragment {
 
     public void SendGameStats(int win, int loss, int tie){
         try {
-            ((RockPaperScissors) getActivity().getApplication()).StoreGamePlays(win, loss, tie);
+            if(getActivity() != null) {
+                ((RockPaperScissors) getActivity().getApplication()).StoreGamePlays(win, loss, tie);
+            }
         }catch (NullPointerException ex){
             System.out.println("LOOK HERE NULL : " + ex);
         }
@@ -291,20 +299,23 @@ public class SecondFragment extends Fragment {
         //add scorewinner in here so that it can write to the db
 
         try {
+
             textView.setVisibility(View.INVISIBLE);
             if (userHand.equals(compPlay)) {
                 new java.util.Timer().schedule(
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textView.setVisibility(View.VISIBLE);
-                                        textView.setText(R.string.tied);
-                                        SendGameStats(0,0,1);
-                                    }
-                                });
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textView.setVisibility(View.VISIBLE);
+                                            textView.setText(R.string.tied);
+                                            SendGameStats(0, 0, 1);
+                                        }
+                                    });
+                                }
                             }
                         }, 2000);
             } else if (DeterminePlays(userHand, compPlay).equals("W")) {
@@ -312,14 +323,16 @@ public class SecondFragment extends Fragment {
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textView.setVisibility(View.VISIBLE);
-                                        textView.setText(R.string.youWon);
-                                        SendGameStats(1,0,0);
-                                    }
-                                });
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textView.setVisibility(View.VISIBLE);
+                                            textView.setText(R.string.youWon);
+                                            SendGameStats(1, 0, 0);
+                                        }
+                                    });
+                                }
                             }
                         }, 2000);
             } else {
@@ -327,18 +340,21 @@ public class SecondFragment extends Fragment {
                         new java.util.TimerTask() {
                             @Override
                             public void run() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textView.setVisibility(View.VISIBLE);
-                                        textView.setText(R.string.computerWon);
-                                        SendGameStats(0,1,0);
-                                    }
-                                });
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            textView.setVisibility(View.VISIBLE);
+                                            textView.setText(R.string.computerWon);
+                                            SendGameStats(0, 1, 0);
+                                        }
+                                    });
+                                }
                             }
                         }, 2000);
             }
-        } catch (NullPointerException ex) {
+
+        } catch (Exception ex) {
             System.out.println(ex);
         }
     }
@@ -366,19 +382,26 @@ public class SecondFragment extends Fragment {
 
     //start timer function
     void startTimer() {
-        cTimer = new CountDownTimer(3000, 1000) {
-            public void onTick(long millisUntilFinished) {
-            }
-
-            public void onFinish() {
-                if (Looper.myLooper() == null) {
-                    Looper.prepare();
+        try {
+            cTimer = new CountDownTimer(3000, 1000) {
+                public void onTick(long millisUntilFinished) {
                 }
-                Toast.makeText(getActivity(), R.string.keepPlaying, Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }
-        };
-        cTimer.start();
+
+                public void onFinish() {
+                    if (Looper.myLooper() == null) {
+                        Looper.prepare();
+                    }
+                    if(getActivity() != null) {
+                        Toast.makeText(getActivity(), R.string.keepPlaying, Toast.LENGTH_LONG).show();
+                    }
+                    Looper.loop();
+                }
+            };
+            cTimer.start();
+        }catch (Exception ex){
+           // cancelTimer();
+            System.out.println("you left the page");
+        }
     }
 
 
