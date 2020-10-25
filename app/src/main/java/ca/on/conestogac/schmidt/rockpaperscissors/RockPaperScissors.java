@@ -57,4 +57,10 @@ public class RockPaperScissors extends Application {
         return score;
 
     }
+
+    public void resetTableStats() {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.execSQL("DELETE FROM tbl_stats;");
+    }
 }

@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class StatisticsActivity extends AppCompatActivity {
@@ -48,54 +50,22 @@ public class StatisticsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-    }
-    /*
-        public void CreateDatabase(){
-            helper = new SQLiteOpenHelper(this, DB_NAME, null, DB_VERSION) {
-                @Override
-                public void onCreate(SQLiteDatabase sqLiteDatabase) {
-                    sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS tbl_stats( " +
-                            "record_min INTEGER, win_record INTEGER, loss_record INTEGER, tie_record INTEGER)");
 
-                }
-
-                @Override
-                public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-                }
-            };
-        }
+        Button buttonResetStats = findViewById(R.id.resetStatsBtn);
 
 
-        public void StoreGamePlays(int win, int loss, int tie) {
-            try {
-                SQLiteDatabase db = helper.getWritableDatabase();
-                db.execSQL("INSERT INTO tbl_stats " +
-                        "(win_record, loss_record, tie_record) " +
-                        "VALUES(" + win + ", " + loss + ", " + tie + ")");
-            }catch (Exception ex){
-                System.out.println("HERE : " + ex);
+        buttonResetStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView allTimeStats = findViewById(R.id.allTimeStats);
+                ((RockPaperScissors) getApplication()).resetTableStats();
+                allTimeStats.setText("0-0-0");
             }
-        }
+        });
 
-        public String GetTotalGameScore() {
-            SQLiteDatabase db = helper.getReadableDatabase();
-            int win, loss, tie;
-            String score = "";
+    }
 
-            Cursor cursor = db.rawQuery("SELECT SUM(win_record) AS win, SUM(loss_record) AS loss, SUM(tie_record) AS tie FROM tbl_stats",
-                    null);
-            cursor.moveToFirst();
-            win = cursor.getInt(0);
-            loss = cursor.getInt(1);
-            tie = cursor.getInt(2);
-            cursor.close();
 
-            score = win + "-" + loss + "-" + tie;
-            return score;
-
-        }
-    */
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {

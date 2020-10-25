@@ -39,7 +39,7 @@ import java.util.logging.Handler;
 public class SecondFragment extends Fragment {
     ImageView imageView, compImageView;
     ViewGroup rootView;
-    String handPlay, compPlay;
+    public String handPlay, compPlay;
     public static String firstPlay;
     public static boolean firstPlayDone, firstPlayOrientationChange;
     int compPlayNum;

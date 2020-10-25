@@ -15,12 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+    public static boolean active = false;
 
     public static String darkMode;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-       // darkMode = getIntent().getStringExtra("DARK_MODE");
+        darkMode = getIntent().getStringExtra("DARK_MODE");
         //SettingsActivity settingsActivity = new SettingsActivity();
         //darkMode = String.valueOf(settingsActivity.darkMode);
        if(darkMode == null){
@@ -65,6 +66,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
     }
 
 }

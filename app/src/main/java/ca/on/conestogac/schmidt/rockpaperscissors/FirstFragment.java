@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 public class FirstFragment extends Fragment {
-    String firstHandPlay;
+   public String firstHandPlay;
 
     @Override
     public View onCreateView(

@@ -41,6 +41,7 @@
 
 
     </LinearLayout>
+
     <TextView
         android:id="@+id/recordStats"
         android:layout_width="wrap_content"

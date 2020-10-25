@@ -112,15 +112,19 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
+        MainActivity mainActivity = new MainActivity();
 
         if (item.getItemId() == android.R.id.home) {
+            if(mainActivity.active == true) {
                 String darkString = Boolean.toString(darkMode);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("DARK_MODE", darkString);
+                startActivity(intent);
+            }else {
 
-            finish();
-            return true;
+                finish();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
