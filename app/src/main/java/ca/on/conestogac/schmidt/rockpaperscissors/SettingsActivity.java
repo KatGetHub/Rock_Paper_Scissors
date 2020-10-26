@@ -1,6 +1,7 @@
 package ca.on.conestogac.schmidt.rockpaperscissors;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,15 +30,17 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences shardPref;
     public static boolean darkMode;
-    boolean saveGame;
+    public static boolean saveGame;
+    public static Activity activity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        activity = this;
 
-        if(darkMode){
+        if (darkMode) {
             setTheme(R.style.DarkTheme);
-        }else{
+        } else {
             setTheme(R.style.AppTheme);
         }
 
@@ -68,11 +71,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public boolean onPreferenceTreeClick (SwitchPreferenceCompat darkSwitch,
-                                          Preference preference)
-    {
+    public boolean onPreferenceTreeClick(SwitchPreferenceCompat darkSwitch,
+                                         Preference preference) {
         String key = preference.getKey();
-        if(key.equals("darkTheme")){
+        if (key.equals("darkTheme")) {
             // do your work
             return true;
         }
@@ -85,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
 
             SwitchPreferenceCompat darkTheme = (SwitchPreferenceCompat) findPreference("darkTheme");
+            final SwitchPreferenceCompat saveGameMode = (SwitchPreferenceCompat) findPreference("saveGame");
 
             if (darkTheme != null) {
                 darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -93,15 +96,37 @@ public class SettingsActivity extends AppCompatActivity {
                         boolean isDarkTheme = (Boolean) isDarkThemeObject;
                         if (isDarkTheme) {
                             darkMode = !darkMode;
-                        }else{
+                           // SettingsActivity.activity.recreate();
+
+                        } else {
                             darkMode = false;
                         }
+
                         return true;
                     }
                 });
             }
+            if(saveGameMode != null){
+                saveGameMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference arg0, Object isSaveGameObject) {
+                        boolean isSaveGame = (Boolean) isSaveGameObject;
+                        if (isSaveGame) {
+                            saveGame = !saveGame;
+
+                        } else {
+                            saveGame = false;
+                        }
+                        return true;
+                    }
+                });
+
+            }
+            //  startActivity(getIntent());
+
 
         }
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
@@ -115,19 +140,19 @@ public class SettingsActivity extends AppCompatActivity {
         MainActivity mainActivity = new MainActivity();
 
         if (item.getItemId() == android.R.id.home) {
-            if(mainActivity.active == true) {
+            if (mainActivity.active) {
                 String darkString = Boolean.toString(darkMode);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("DARK_MODE", darkString);
                 startActivity(intent);
-            }else {
-
+            } else {
                 finish();
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
     }
+
     /*
     public boolean onOptionsItemSelected(MenuItem item){
         //onbackpressed();
@@ -148,6 +173,8 @@ public class SettingsActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("rememberDarkTheme", darkMode);
+        outState.putBoolean("savedGame", saveGame);
+
     }
 }
 

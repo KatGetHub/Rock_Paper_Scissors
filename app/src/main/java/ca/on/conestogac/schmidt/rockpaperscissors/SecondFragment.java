@@ -9,12 +9,17 @@ package ca.on.conestogac.schmidt.rockpaperscissors;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Looper;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +28,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.widget.Toast;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Timer;
 
 
@@ -40,11 +48,17 @@ public class SecondFragment extends Fragment {
     ImageView imageView, compImageView;
     ViewGroup rootView;
     public String handPlay, compPlay;
+    public boolean saveGame;
     public static String firstPlay;
     public static boolean firstPlayDone, firstPlayOrientationChange;
     int compPlayNum;
     TextView textView;
     CountDownTimer cTimer = null;
+    private final String SOME_VALUE_KEY = "someValueToSave";
+    public static String USER_PLAY;
+    public static String COMP_PLAY;
+    public static String GAME_OUTCOME;
+    public static final String MY_PREFS_NAME = "mySavedGame";
 
 
     @Override
@@ -52,6 +66,8 @@ public class SecondFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+
+
         // Inflate the layout for this fragment
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_second, container, false);
         imageView = (ImageView) rootView.findViewById(R.id.youImageView);
@@ -62,27 +78,42 @@ public class SecondFragment extends Fragment {
         if (savedInstanceState != null) {
             handPlay = savedInstanceState.getString("userPlay", "");
             compPlayNum = savedInstanceState.getInt("compPlay", 0);
+            saveGame = savedInstanceState.getBoolean("saveGame", false);
 
             SetImage(handPlay);
             SetComputerPlay(compPlayNum);
             CheckWinner(handPlay);
 
         }
+        if(!saveGame){
+            if(getContext() != null) {
+                SharedPreferences prefs = getContext().getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+                String name = prefs.getString("name", "p");
+                String idName = prefs.getString("idName", "p");
+                compImageView.setImageResource(R.drawable.ic_rock);
+                imageView.setImageResource(R.drawable.ic_rock);
 
-        //checks for the first play from the first fragment
-        if (!firstPlayDone) {
-            SetImage(firstPlay);
-            if (firstPlayOrientationChange) {
-                SetComputerPlay(compPlayNum);
-            } else {
-                ComputerPlayer();
             }
+        }else {
 
-            CheckWinner(firstPlay);
-            firstPlayOrientationChange = true;
-            cancelTimer();
-            startTimer();
+            //checks for the first play from the first fragment
+            if (!firstPlayDone) {
+                SetImage(firstPlay);
+                if (firstPlayOrientationChange) {
+                    SetComputerPlay(compPlayNum);
+                } else {
+                    ComputerPlayer();
+                }
+
+                CheckWinner(firstPlay);
+                firstPlayOrientationChange = true;
+                cancelTimer();
+                startTimer();
+            }
         }
+
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.active = false;
 
         return rootView;
     }
@@ -205,6 +236,23 @@ public class SecondFragment extends Fragment {
 
     }
 
+    public void SaveGame(String user, String comp, String outcome){
+        if(getContext() != null) {
+            Context context = getActivity();
+
+            SharedPreferences.Editor editor = getContext().getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE).edit();
+            editor.putString("savedHand", user);
+            editor.putString("savedComp", comp);
+            editor.putString("savedOutcome", outcome);
+            editor.apply();
+        }
+    }
+    public void TimeStamp(){
+
+    }
+
+
+
     //the listeners and setting the play variables for the user
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -220,6 +268,8 @@ public class SecondFragment extends Fragment {
                 CheckWinner(handPlay);
                 cancelTimer();
                 startTimer();
+                System.out.println("HELLOOO" + Math.round(System.currentTimeMillis() / 1000));
+
             }
         });
 
@@ -233,6 +283,7 @@ public class SecondFragment extends Fragment {
                 CheckWinner(handPlay);
                 cancelTimer();
                 startTimer();
+                System.out.println("HELLOOO" + Math.round(System.currentTimeMillis() / 1000));
 
             }
         });
@@ -247,6 +298,8 @@ public class SecondFragment extends Fragment {
                 CheckWinner(handPlay);
                 cancelTimer();
                 startTimer();
+                System.out.println("HELLOOO" + Math.round(System.currentTimeMillis() / 1000));
+
 
             }
         });
@@ -300,7 +353,7 @@ public class SecondFragment extends Fragment {
 
         try {
 
-            textView.setVisibility(View.INVISIBLE);
+           // textView.setVisibility(View.INVISIBLE);
             if (userHand.equals(compPlay)) {
                 new java.util.Timer().schedule(
                         new java.util.TimerTask() {
@@ -360,9 +413,13 @@ public class SecondFragment extends Fragment {
     }
 
     public void onSaveInstanceState(Bundle outState) {
+        SettingsActivity settingsActivity = new SettingsActivity();
+        saveGame = settingsActivity.saveGame;
         super.onSaveInstanceState(outState);
         outState.putString("userPlay", handPlay);
         outState.putInt("compPlay", compPlayNum);
+        outState.putBoolean("saveGame", saveGame);
+
     }
 
     public void CheckTime() {
@@ -411,6 +468,16 @@ public class SecondFragment extends Fragment {
             cTimer.cancel();
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        if(savedInstanceState != null) {
+            boolean gameSaved = savedInstanceState.getBoolean("savedGame", false);
+        }
+
+    }
 }
 
 
