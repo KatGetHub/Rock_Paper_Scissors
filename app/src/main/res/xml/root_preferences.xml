@@ -12,7 +12,8 @@
         <SwitchPreferenceCompat
             android:id="@+id/saveGame"
             android:visibility="visible"
-            app:key="saveOnClose"
+            app:key="saveGame"
+            android:checked="false"
             app:title="@string/optSaveGame" />
     </PreferenceCategory>
     <PreferenceCategory

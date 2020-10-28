@@ -32,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static boolean darkMode;
     public static boolean saveGame;
     public static Activity activity = null;
+    public static final String SAVE_GAME = "saveGame";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         shardPref = PreferenceManager.getDefaultSharedPreferences(this);
         shardPref.edit().putBoolean("darkTheme", darkMode).apply();
-
+        shardPref.edit().putBoolean("saveGame", saveGame).apply();
 
     }
 
@@ -87,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
 
             SwitchPreferenceCompat darkTheme = (SwitchPreferenceCompat) findPreference("darkTheme");
-            final SwitchPreferenceCompat saveGameMode = (SwitchPreferenceCompat) findPreference("saveGame");
+            SwitchPreferenceCompat saveGameMode = (SwitchPreferenceCompat) findPreference("saveGame");
 
             if (darkTheme != null) {
                 darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -134,42 +135,40 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    public void SaveGame(){
+        SharedPreferences sp = getSharedPreferences(SAVE_GAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("saveGame", saveGame);
+        editor.commit();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         MainActivity mainActivity = new MainActivity();
 
+        if(saveGame){
+            SaveGame();
+
+        }
         if (item.getItemId() == android.R.id.home) {
+            //this does work to seperate the 2, fragment v activity
             if (mainActivity.active) {
                 String darkString = Boolean.toString(darkMode);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("DARK_MODE", darkString);
                 startActivity(intent);
             } else {
-                finish();
-                return true;
-            }
+                String darkString = Boolean.toString(darkMode);
+                Intent intent = new Intent(getApplicationContext(), SavedGame.class);
+                intent.putExtra("DARK_MODE", darkString);
+                startActivity(intent);
+           }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-    public boolean onOptionsItemSelected(MenuItem item){
-        //onbackpressed();
-        SecondFragment secondFragment = new SecondFragment();
-        if(secondFragment.firstPlay == null){
-            String darkString = Boolean.toString(darkMode);
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.putExtra("DARK_MODE", darkString);
-            startActivity(intent);
-        }else{
-            getSupportFragmentManager().beginTransaction().replace(R.id.settings,secondFragment).commit();
 
-        }
-
-        return true;
-    }
-*/
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("rememberDarkTheme", darkMode);

@@ -6,42 +6,35 @@ title: Rock paper scissors
  */
 package ca.on.conestogac.schmidt.rockpaperscissors;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
     public static boolean active = false;
+    androidx.appcompat.widget.Toolbar toolbar;
+
     private SecondFragment secondFragment;
     private final String SECOND_FRAGMENT_TAG = "secondFragment";
     static final String SECOND_FRAGMENT = "secondFragment";
-
+    static boolean savedGame;
     public static String darkMode;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        if (savedInstanceState != null) { // saved instance state, fragment may exist
-            // look up the instance that already exists by tag
-           // secondFragment = (SecondFragment)
-                //    getSupportFragmentManager().findFragmentByTag(SECOND_FRAGMENT_TAG);
-
-            FragmentManager manager = getFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
-          //  transaction.replace(R.id.SecondFragment, MainFragment.newInstance());
-            transaction.commit();
-        } else if (secondFragment == null) {
-            // only create fragment if they haven't been instantiated already
-           // secondFragment = new SecondFragment();
-            Intent i = new Intent(MainActivity.this,SavedGame.class);
-            startActivity(i);
-        }
+        SharedPreferences sp = getSharedPreferences("saveGame", Activity.MODE_PRIVATE);
+        savedGame = sp.getBoolean("saveGame", false);
 
 
         darkMode = getIntent().getStringExtra("DARK_MODE");
@@ -61,7 +54,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (savedGame) {
+
+            savedGame = false;
+            Intent i = new Intent(MainActivity.this,SavedGame.class);
+            startActivity(i);
+        }
+
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,4 +100,9 @@ public class MainActivity extends AppCompatActivity {
         active = true;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
+    }
 }
