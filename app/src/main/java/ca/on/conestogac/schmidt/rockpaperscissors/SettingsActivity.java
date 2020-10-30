@@ -37,6 +37,11 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        SharedPreferences sp = getSharedPreferences("saveGame", Activity.MODE_PRIVATE);
+        saveGame = sp.getBoolean("saveGame", false);
+        String dark = sp.getString("theme", "false");
+        darkMode = Boolean.parseBoolean(dark);
+
         activity = this;
 
         if (darkMode) {
@@ -67,20 +72,11 @@ public class SettingsActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
         shardPref = PreferenceManager.getDefaultSharedPreferences(this);
-        shardPref.edit().putBoolean("darkTheme", darkMode).apply();
-        shardPref.edit().putBoolean("saveGame", saveGame).apply();
+        //shardPref.edit().putBoolean("darkTheme", darkMode).apply();
+       // shardPref.edit().putBoolean("saveGame", saveGame).apply();
 
     }
 
-    public boolean onPreferenceTreeClick(SwitchPreferenceCompat darkSwitch,
-                                         Preference preference) {
-        String key = preference.getKey();
-        if (key.equals("darkTheme")) {
-            // do your work
-            return true;
-        }
-        return false;
-    }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
@@ -90,7 +86,11 @@ public class SettingsActivity extends AppCompatActivity {
             SwitchPreferenceCompat darkTheme = (SwitchPreferenceCompat) findPreference("darkTheme");
             SwitchPreferenceCompat saveGameMode = (SwitchPreferenceCompat) findPreference("saveGame");
 
+
             if (darkTheme != null) {
+                if(darkMode){
+                    darkTheme.setChecked(true);
+                }
                 darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference arg0, Object isDarkThemeObject) {
@@ -108,6 +108,9 @@ public class SettingsActivity extends AppCompatActivity {
                 });
             }
             if(saveGameMode != null){
+                if(saveGame){
+                    saveGameMode.setChecked(true);
+                }
                 saveGameMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference arg0, Object isSaveGameObject) {
@@ -136,9 +139,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void SaveGame(){
+        String darkString = Boolean.toString(darkMode);
+
         SharedPreferences sp = getSharedPreferences(SAVE_GAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("saveGame", saveGame);
+        editor.putString("theme", darkString);
         editor.commit();
     }
 
@@ -147,23 +153,24 @@ public class SettingsActivity extends AppCompatActivity {
 
         MainActivity mainActivity = new MainActivity();
 
-        if(saveGame){
-            SaveGame();
+        SaveGame();
 
-        }
         if (item.getItemId() == android.R.id.home) {
-            //this does work to seperate the 2, fragment v activity
+            //if (mainActivity.active) {
             if (mainActivity.active) {
                 String darkString = Boolean.toString(darkMode);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("DARK_MODE", darkString);
                 startActivity(intent);
-            } else {
+            } else if(saveGame){
                 String darkString = Boolean.toString(darkMode);
                 Intent intent = new Intent(getApplicationContext(), SavedGame.class);
                 intent.putExtra("DARK_MODE", darkString);
                 startActivity(intent);
-           }
+           }else{
+                finish();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }

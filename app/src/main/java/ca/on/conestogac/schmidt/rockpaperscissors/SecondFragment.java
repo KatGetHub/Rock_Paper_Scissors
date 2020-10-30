@@ -98,14 +98,16 @@ public class SecondFragment extends Fragment {
         if(gameSaved){
             if(getContext() != null) {
                 SharedPreferences prefs = getContext().getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
-                String name = prefs.getString("name", "p");
-                String idName = prefs.getString("idName", "p");
-                compImageView.setImageResource(R.drawable.ic_rock);
-                imageView.setImageResource(R.drawable.ic_rock);
-                setHasOptionsMenu(true);
-                gameSaved = false;
-
-
+                String userPlayer = prefs.getString("savedHand", "P");
+                String compPlayer = prefs.getString("savedComp", "P");
+                String outcome = prefs.getString("savedOutcome", "Who won");
+                if(userPlayer != null) {
+                    SetPlayerImage(userPlayer);
+                }
+                if(compPlayer != null) {
+                    SetCompImage(compPlayer);
+                }
+                textView.setText(outcome);
             }
         }else {
             //checks for the first play from the first fragment
@@ -125,7 +127,7 @@ public class SecondFragment extends Fragment {
         }
 
         MainActivity mainActivity = new MainActivity();
-       // mainActivity.active = false;
+        mainActivity.active = false;
 
         return rootView;
     }
@@ -229,6 +231,41 @@ public class SecondFragment extends Fragment {
 
     }
 
+    public void SetCompImage(String comp) {
+        switch (comp) {
+            case "R":
+                compImageView.setImageResource(R.drawable.ic_rock);
+                break;
+
+            case "P":
+                compImageView.setImageResource(R.drawable.ic_paper);
+                break;
+
+            case "S":
+                compImageView.setImageResource(R.drawable.ic_scissors);
+                break;
+
+        }
+
+    }
+    public void SetPlayerImage(String hand) {
+        switch (hand) {
+            case "R":
+                imageView.setImageResource(R.drawable.ic_rock);
+                break;
+
+            case "P":
+                imageView.setImageResource(R.drawable.ic_paper);
+                break;
+
+            case "S":
+                imageView.setImageResource(R.drawable.ic_scissors);
+                break;
+
+        }
+
+    }
+
     //this sets the users drawable image to their play
     public void SetImage(String hand) {
         switch (hand) {
@@ -245,8 +282,8 @@ public class SecondFragment extends Fragment {
                 break;
 
         }
-        imageView.setAlpha(0f);
-        imageView.animate().alpha(1f).setDuration(1000);
+            imageView.setAlpha(0f);
+            imageView.animate().alpha(1f).setDuration(1000);
 
     }
 
@@ -364,7 +401,6 @@ public class SecondFragment extends Fragment {
     public void CheckWinner(String userHand) {
 
         //add scorewinner in here so that it can write to the db
-
         try {
 
            // textView.setVisibility(View.INVISIBLE);
@@ -424,6 +460,7 @@ public class SecondFragment extends Fragment {
         } catch (Exception ex) {
             System.out.println(ex);
         }
+        SaveGame(userHand, compPlay, textView.getText().toString());
     }
 
     public void onSaveInstanceState(Bundle outState) {

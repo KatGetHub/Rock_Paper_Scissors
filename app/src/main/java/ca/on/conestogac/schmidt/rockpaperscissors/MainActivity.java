@@ -30,13 +30,17 @@ public class MainActivity extends AppCompatActivity {
     static final String SECOND_FRAGMENT = "secondFragment";
     static boolean savedGame;
     public static String darkMode;
+    String dark;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         SharedPreferences sp = getSharedPreferences("saveGame", Activity.MODE_PRIVATE);
         savedGame = sp.getBoolean("saveGame", false);
+        dark = sp.getString("theme", "false");
 
-
+        if(dark == null){
+            dark = "";
+        }
         darkMode = getIntent().getStringExtra("DARK_MODE");
         //SettingsActivity settingsActivity = new SettingsActivity();
         //darkMode = String.valueOf(settingsActivity.darkMode);
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if(darkMode.equals("true")){
+        if(darkMode.equals("true") || dark.equals("true")){
             setTheme(R.style.DarkTheme);
         }else{
             setTheme(R.style.AppTheme);
@@ -56,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedGame) {
 
-            savedGame = false;
             Intent i = new Intent(MainActivity.this,SavedGame.class);
             startActivity(i);
         }
@@ -100,9 +103,5 @@ public class MainActivity extends AppCompatActivity {
         active = true;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        active = false;
-    }
+
 }

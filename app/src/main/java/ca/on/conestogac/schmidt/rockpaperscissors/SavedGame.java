@@ -1,6 +1,8 @@
 package ca.on.conestogac.schmidt.rockpaperscissors;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,15 +15,22 @@ public class SavedGame extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.active = false;
+        SharedPreferences sp = getSharedPreferences("saveGame", Activity.MODE_PRIVATE);
+        String dark = sp.getString("theme", "false");
         darkMode = getIntent().getStringExtra("DARK_MODE");
         //SettingsActivity settingsActivity = new SettingsActivity();
         //darkMode = String.valueOf(settingsActivity.darkMode);
         if(darkMode == null){
             darkMode = "";
         }
+        if(dark == null){
+            dark = "";
+        }
 
 
-        if(darkMode.equals("true")){
+        if(darkMode.equals("true") || dark.equals("true")){
             setTheme(R.style.DarkTheme);
         }else{
             setTheme(R.style.AppTheme);
