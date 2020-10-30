@@ -31,12 +31,12 @@ public class RockPaperScissors extends Application {
         super.onCreate();
 
     }
-    public void StoreGamePlays(int win, int loss, int tie) {
+    public void StoreGamePlays(int timestamp, int win, int loss, int tie) {
 
         SQLiteDatabase db = helper.getWritableDatabase();
         db.execSQL("INSERT INTO tbl_stats " +
-                "(win_record, loss_record, tie_record) " +
-                "VALUES(" + win + ", " + loss + ", " + tie + ")");
+                "(record_min, win_record, loss_record, tie_record) " +
+                "VALUES( " + timestamp + ", " + win + ", " + loss + ", " + tie + ")");
 
     }
 
@@ -46,6 +46,25 @@ public class RockPaperScissors extends Application {
         String score = "";
 
         Cursor cursor = db.rawQuery("SELECT SUM(win_record) AS win, SUM(loss_record) AS loss, SUM(tie_record) AS tie FROM tbl_stats",
+                null);
+        cursor.moveToFirst();
+        win = cursor.getInt(0);
+        loss = cursor.getInt(1);
+        tie = cursor.getInt(2);
+        cursor.close();
+
+        score = win + "-" + loss + "-" + tie;
+        return score;
+
+    }
+
+    public String GetMinTotalGameScore() {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        int win, loss, tie;
+        String score = "";
+
+        Cursor cursor = db.rawQuery("SELECT SUM(win_record) AS win, SUM(loss_record) AS loss, SUM(tie_record) AS tie FROM tbl_stats" +
+                        " WHERE record_min= (SELECT max(record_min) FROM tbl_stats);",
                 null);
         cursor.moveToFirst();
         win = cursor.getInt(0);

@@ -3,7 +3,9 @@ package ca.on.conestogac.schmidt.rockpaperscissors;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,13 +25,18 @@ public class StatisticsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        SharedPreferences sp = getSharedPreferences("saveGame", Activity.MODE_PRIVATE);
+        String dark = sp.getString("theme", "false");
         darkMode = getIntent().getStringExtra("DARK_MODE");
 
         if(darkMode == null){
             darkMode = "";
         }
-        if(darkMode.equals("true")){
+
+        if(dark == null){
+            dark = "";
+        }
+        if(darkMode.equals("true") || dark.equals("true")){
             setTheme(R.style.DarkTheme);
         }else{
             setTheme(R.style.AppTheme);
@@ -39,9 +46,13 @@ public class StatisticsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistics);
 
         TextView allTimeRecord = (TextView)findViewById(R.id.allTimeStats);
+        TextView minRecord = (TextView)findViewById(R.id.recordStats);
+
         //allTimeRecord.setText(GetTotalGameScore());
         try {
             allTimeRecord.setText(((RockPaperScissors) getApplication()).GetTotalGameScore());
+            minRecord.setText(((RockPaperScissors) getApplication()).GetMinTotalGameScore());
+
         }catch (NullPointerException ex){
             System.out.println("LOOK HERE NULL : " + ex);
         }
@@ -58,8 +69,10 @@ public class StatisticsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 TextView allTimeStats = findViewById(R.id.allTimeStats);
+                TextView minStats = (TextView)findViewById(R.id.recordStats);
                 ((RockPaperScissors) getApplication()).resetTableStats();
                 allTimeStats.setText("0-0-0");
+                minStats.setText("0-0-0");
             }
         });
 

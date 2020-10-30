@@ -10,12 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/SplashScreenTheme">
+        <service
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="false"></service>
+
         <activity
             android:name=".StatisticsActivity"
-            android:label="@string/statsLabel"/>
-        <activity
-            android:name=".SavedGame"
-            />
+            android:label="@string/statsLabel" />
+        <activity android:name=".SavedGame" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />

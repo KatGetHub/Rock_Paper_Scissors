@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private final String SECOND_FRAGMENT_TAG = "secondFragment";
     static final String SECOND_FRAGMENT = "secondFragment";
     static boolean savedGame;
-    public static String darkMode;
+    public static String darkMode, startNotifGame;
     String dark;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,10 +42,14 @@ public class MainActivity extends AppCompatActivity {
             dark = "";
         }
         darkMode = getIntent().getStringExtra("DARK_MODE");
-        //SettingsActivity settingsActivity = new SettingsActivity();
-        //darkMode = String.valueOf(settingsActivity.darkMode);
+        startNotifGame = getIntent().getStringExtra("startFromNotification");
+
        if(darkMode == null){
             darkMode = "";
+        }
+
+        if(startNotifGame == null){
+            startNotifGame = "";
         }
 
 
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedGame) {
+        if (savedGame || startNotifGame.equals("true")) {
 
             Intent i = new Intent(MainActivity.this,SavedGame.class);
             startActivity(i);

@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -123,7 +124,20 @@ public class SecondFragment extends Fragment {
                 firstPlayOrientationChange = true;
                 cancelTimer();
                 startTimer();
+            }else{
+                SharedPreferences prefs = getContext().getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
+                String userPlayer = prefs.getString("savedHand", "P");
+                String compPlayer = prefs.getString("savedComp", "P");
+                String outcome = prefs.getString("savedOutcome", "Who won");
+                if(userPlayer != null) {
+                    SetPlayerImage(userPlayer);
+                }
+                if(compPlayer != null) {
+                    SetCompImage(compPlayer);
+                }
+                textView.setText(outcome);
             }
+
         }
 
         MainActivity mainActivity = new MainActivity();
@@ -298,9 +312,6 @@ public class SecondFragment extends Fragment {
             editor.apply();
         }
     }
-    public void TimeStamp(){
-
-    }
 
 
 
@@ -319,8 +330,6 @@ public class SecondFragment extends Fragment {
                 CheckWinner(handPlay);
                 cancelTimer();
                 startTimer();
-                System.out.println("HELLOOO" + Math.round(System.currentTimeMillis() / 1000));
-
             }
         });
 
@@ -334,8 +343,6 @@ public class SecondFragment extends Fragment {
                 CheckWinner(handPlay);
                 cancelTimer();
                 startTimer();
-                System.out.println("HELLOOO" + Math.round(System.currentTimeMillis() / 1000));
-
             }
         });
 
@@ -349,8 +356,6 @@ public class SecondFragment extends Fragment {
                 CheckWinner(handPlay);
                 cancelTimer();
                 startTimer();
-                System.out.println("HELLOOO" + Math.round(System.currentTimeMillis() / 1000));
-
 
             }
         });
@@ -388,9 +393,11 @@ public class SecondFragment extends Fragment {
     }
 
     public void SendGameStats(int win, int loss, int tie){
+        int timeStamp =  Math.round(System.currentTimeMillis() / 1000);
+
         try {
             if(getActivity() != null) {
-                ((RockPaperScissors) getActivity().getApplication()).StoreGamePlays(win, loss, tie);
+                ((RockPaperScissors) getActivity().getApplication()).StoreGamePlays(timeStamp, win, loss, tie);
             }
         }catch (NullPointerException ex){
             System.out.println("LOOK HERE NULL : " + ex);
@@ -399,7 +406,7 @@ public class SecondFragment extends Fragment {
 
     }
     public void CheckWinner(String userHand) {
-
+        String outcome = "";
         //add scorewinner in here so that it can write to the db
         try {
 
@@ -421,6 +428,7 @@ public class SecondFragment extends Fragment {
                                 }
                             }
                         }, 2000);
+                outcome =  getResources().getString(R.string.tied);
             } else if (DeterminePlays(userHand, compPlay).equals("W")) {
                 new java.util.Timer().schedule(
                         new java.util.TimerTask() {
@@ -438,6 +446,7 @@ public class SecondFragment extends Fragment {
                                 }
                             }
                         }, 2000);
+                outcome =  getResources().getString(R.string.youWon);
             } else {
                 new java.util.Timer().schedule(
                         new java.util.TimerTask() {
@@ -455,12 +464,13 @@ public class SecondFragment extends Fragment {
                                 }
                             }
                         }, 2000);
+                outcome =  getResources().getString(R.string.computerWon);
             }
 
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        SaveGame(userHand, compPlay, textView.getText().toString());
+        SaveGame(userHand, compPlay, outcome);
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -473,20 +483,6 @@ public class SecondFragment extends Fragment {
 
     }
 
-    public void CheckTime() {
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();//Call looper.prepare()
-                        Toast.makeText(getActivity(), R.string.keepPlaying, Toast.LENGTH_LONG).show();
-                        Looper.loop();
-                    }
-
-                },
-                3000
-        );
-    }
 
     //start timer function
     void startTimer() {
@@ -519,6 +515,13 @@ public class SecondFragment extends Fragment {
             cTimer.cancel();
     }
 
+    @Override
+    public void onStop() {
+        if(getActivity() != null) {
+            getActivity().startService(new Intent(getActivity(), NotificationService.class));
+        }
+        super.onStop();
+    }
 
 
 }

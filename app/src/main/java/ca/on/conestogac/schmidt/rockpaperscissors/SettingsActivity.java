@@ -27,6 +27,8 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+//FIX GOING BACK WHEN NOT SAVING AND CHANGING THEME, AND SAVING AND GOING BACK
+
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences shardPref;
     public static boolean darkMode;
@@ -72,8 +74,6 @@ public class SettingsActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
         shardPref = PreferenceManager.getDefaultSharedPreferences(this);
-        //shardPref.edit().putBoolean("darkTheme", darkMode).apply();
-       // shardPref.edit().putBoolean("saveGame", saveGame).apply();
 
     }
 
@@ -144,7 +144,11 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(SAVE_GAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("saveGame", saveGame);
-        editor.putString("theme", darkString);
+        if(saveGame) {
+            editor.putString("theme", darkString);
+        }else{
+            editor.putString("theme", "false");
+        }
         editor.commit();
     }
 
