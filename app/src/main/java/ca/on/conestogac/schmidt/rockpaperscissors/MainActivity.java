@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private final String SECOND_FRAGMENT_TAG = "secondFragment";
     static final String SECOND_FRAGMENT = "secondFragment";
     static boolean savedGame;
-    public static String darkMode, startNotifGame;
+    public static String darkMode;
+    public String startNotifGame;
     String dark;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedGame || startNotifGame.equals("true")) {
+        //if to see if apps been closed
+
+        if (savedGame ) {
 
             Intent i = new Intent(MainActivity.this,SavedGame.class);
             startActivity(i);
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent myIntent = new Intent(getBaseContext(), SettingsActivity.class);
+            myIntent.putExtra("DARK_MODE", darkMode);
             startActivity(myIntent);
 
         }else if(id == R.id.action_statistics){
@@ -103,9 +107,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onStart() {
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
         super.onStart();
         active = true;
     }
-
 
 }

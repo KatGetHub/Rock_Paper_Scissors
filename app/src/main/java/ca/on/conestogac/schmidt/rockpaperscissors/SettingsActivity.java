@@ -27,7 +27,8 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-//FIX GOING BACK WHEN NOT SAVING AND CHANGING THEME, AND SAVING AND GOING BACK
+//going back from save game to main page when theme change is a little weird, maybe get rid of the second if statment,
+//also maybe try and get a way for the page to go back to the main game with the notification
 
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences shardPref;
@@ -35,18 +36,23 @@ public class SettingsActivity extends AppCompatActivity {
     public static boolean saveGame;
     public static Activity activity = null;
     public static final String SAVE_GAME = "saveGame";
+    public static boolean themeChanged;
+    private static String dark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         SharedPreferences sp = getSharedPreferences("saveGame", Activity.MODE_PRIVATE);
         saveGame = sp.getBoolean("saveGame", false);
-        String dark = sp.getString("theme", "false");
-        darkMode = Boolean.parseBoolean(dark);
+        dark = sp.getString("theme", "false");
+        darkMode =  Boolean.parseBoolean(sp.getString("theme", "false"));
 
         activity = this;
 
-        if (darkMode) {
+        if(dark == null){
+            dark = "";
+        }
+        if (darkMode || dark.equals("true")) {
             setTheme(R.style.DarkTheme);
         } else {
             setTheme(R.style.AppTheme);
@@ -69,12 +75,11 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        themeChanged = false;
 
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
         shardPref = PreferenceManager.getDefaultSharedPreferences(this);
-
     }
 
 
@@ -88,8 +93,10 @@ public class SettingsActivity extends AppCompatActivity {
 
 
             if (darkTheme != null) {
-                if(darkMode){
+                if(dark.equals("true") || darkMode){
                     darkTheme.setChecked(true);
+                }else{
+                    darkTheme.setChecked(false);
                 }
                 darkTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
@@ -102,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity {
                         } else {
                             darkMode = false;
                         }
-
+                        themeChanged = true;
                         return true;
                     }
                 });
@@ -110,6 +117,8 @@ public class SettingsActivity extends AppCompatActivity {
             if(saveGameMode != null){
                 if(saveGame){
                     saveGameMode.setChecked(true);
+                }else{
+                    saveGameMode.setChecked(false);
                 }
                 saveGameMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
@@ -126,9 +135,6 @@ public class SettingsActivity extends AppCompatActivity {
                 });
 
             }
-            //  startActivity(getIntent());
-
-
         }
 
         @Override
@@ -144,11 +150,8 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(SAVE_GAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("saveGame", saveGame);
-        if(saveGame) {
-            editor.putString("theme", darkString);
-        }else{
-            editor.putString("theme", "false");
-        }
+        editor.putString("theme", darkString);
+
         editor.commit();
     }
 
@@ -160,13 +163,15 @@ public class SettingsActivity extends AppCompatActivity {
         SaveGame();
 
         if (item.getItemId() == android.R.id.home) {
-            //if (mainActivity.active) {
-            if (mainActivity.active) {
+            if (mainActivity.active || themeChanged ) {
+                //goes back to main activity if dark theme or still in main activity
                 String darkString = Boolean.toString(darkMode);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("DARK_MODE", darkString);
                 startActivity(intent);
-            } else if(saveGame){
+            }
+            else if(saveGame){
+                //goes back to saved game if nothing else has been pressed
                 String darkString = Boolean.toString(darkMode);
                 Intent intent = new Intent(getApplicationContext(), SavedGame.class);
                 intent.putExtra("DARK_MODE", darkString);

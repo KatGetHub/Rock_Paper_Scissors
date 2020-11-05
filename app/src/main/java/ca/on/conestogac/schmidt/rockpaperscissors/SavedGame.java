@@ -17,6 +17,7 @@ public class SavedGame extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         MainActivity mainActivity = new MainActivity();
         mainActivity.active = false;
+
         SharedPreferences sp = getSharedPreferences("saveGame", Activity.MODE_PRIVATE);
         String dark = sp.getString("theme", "false");
         darkMode = getIntent().getStringExtra("DARK_MODE");

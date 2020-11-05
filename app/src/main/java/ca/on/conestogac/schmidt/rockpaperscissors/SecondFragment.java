@@ -124,18 +124,6 @@ public class SecondFragment extends Fragment {
                 firstPlayOrientationChange = true;
                 cancelTimer();
                 startTimer();
-            }else{
-                SharedPreferences prefs = getContext().getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE);
-                String userPlayer = prefs.getString("savedHand", "P");
-                String compPlayer = prefs.getString("savedComp", "P");
-                String outcome = prefs.getString("savedOutcome", "Who won");
-                if(userPlayer != null) {
-                    SetPlayerImage(userPlayer);
-                }
-                if(compPlayer != null) {
-                    SetCompImage(compPlayer);
-                }
-                textView.setText(outcome);
             }
 
         }
